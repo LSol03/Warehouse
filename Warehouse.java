@@ -2,10 +2,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Warehouse {
-    private int size;
-    private Map<String, Integer> elements = new HashMap<>();
-    public void addMaterial(){
-        
+    private final int size;
+    private int currentSize;
+    private Map<Material, Integer> elements = new HashMap<>();
+    public Warehouse(int size){
+        this.size = size;
+    }
+    public void addMaterial(Material material, int count) throws SpecifiedQuantityExeption, FullWarehouseExeption {
+        WarehouseMaterial wm = new WarehouseMaterial(material, count);
+        wm.addMaterial(count);
+        if(currentSize > size){
+            throw new FullWarehouseExeption();
+        }
+        if(currentSize + count > size){
+            elements.put(material, size - currentSize);
+            throw  new FullWarehouseExeption();
+        }else{
+            elements.put(material, count);
+        }
     }
     public void removeMaterial(){
 
@@ -27,6 +41,10 @@ public class Warehouse {
                 throw new NotExistExeption();
             }
             this.count -= count;
+        }
+        WarehouseMaterial(Material material, int count){
+            this.material = material;
+            this.count = count;
         }
     }
 }
