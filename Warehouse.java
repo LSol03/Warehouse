@@ -2,9 +2,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Warehouse {
-    private int size = 0;
-    public void addMaterial(MaterialType mt, String s){
-        elements.put(mt,s);
+    private class WarehouseMaterial extends Material{
+        int count;
+        void addMaterial(){
+
+        }
+        void removeMaterial(){
+
+        }
+    }
+    private int size;
+    public void addMaterial(){
+        
     }
     public void removeMaterial(){
 
@@ -12,5 +21,4 @@ public class Warehouse {
     public void moveMaterial(){
 
     }
-    Map<MaterialType, String> elements = new HashMap<>();
 }
