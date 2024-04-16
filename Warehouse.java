@@ -16,13 +16,23 @@ public class Warehouse {
         }
         if(currentSize + count > size){
             elements.put(material, size - currentSize);
-            throw  new FullWarehouseExeption();
+            throw new FullWarehouseExeption();
         }else{
             elements.put(material, count);
         }
     }
-    public void removeMaterial(){
-
+    public void removeMaterial(Material material, int count) throws EmptyWarehouseExeption, NotExistExeption {
+        WarehouseMaterial wm = new WarehouseMaterial(material, count);
+        wm.removeMaterial(count);
+        if(currentSize == 0){
+            throw new EmptyWarehouseExeption();
+        }
+        if(currentSize - count <= 0){
+            elements.remove(material, currentSize);
+            throw new EmptyWarehouseExeption();
+        }else{
+            elements.remove(material, count);
+        }
     }
     public void moveMaterial(){
 
