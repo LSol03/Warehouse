@@ -8,12 +8,15 @@ public class Warehouse {
     public Warehouse(int capacity){
         this.capacity = capacity;
     }
+    public Warehouse(){
+        capacity = 100;
+    }
     public void addMaterial(String material, int count) {
 
 
     }
     public void removeMaterial(String material, int count) {
-        
+
     }
     public void moveMaterial(){
 
@@ -21,34 +24,24 @@ public class Warehouse {
     private class WarehouseMaterial{   
         private int count;
         private int maxCount = 10;
-        private Material material;
-        int addMaterial(int c) throws SpecifiedQuantityExeption {
-            int materialSize = 0;
-            try{
-                if(c + count <= maxCount){
-                    materialSize =  (c + count) * material.getSize();
-                    if ( c + count == maxCount) throw new SpecifiedQuantityExeption();
-                } else{
-                    materialSize = (maxCount) * material.getSize();
-                }
-            }catch (SpecifiedQuantityExeption e){
-                //
+        Material material;
+        int addMaterial(int addCount){
+            if (count + addCount > maxCount) {
+                int returnCount = maxCount - count;
+                count = maxCount;
+                return returnCount * material.getSize();
             }
-            return materialSize;
+            else {
+                count += addCount;
+                return addCount * material.getSize();
+            }
         }
-        int removeMaterial(int c) {
-            int materialSize = 0;
-            try{
-                if( count - c >= 0 ){
-                    materialSize = (count - c) * material.getSize();
-                    if(count == 0) throw new NotExistExeption();
-                }else{
-                    materialSize = count * material.getSize();
-                }
-            }catch (NotExistExeption e){
-                //
+        int removeMaterial(int removeCount) throws EmptyWarehouseExeption {
+            if (count <= removeCount) { throw new EmptyWarehouseExeption(); }
+            else {
+                count -= removeCount;
+                return removeCount * material.getSize();
             }
-            return materialSize;
         }
         WarehouseMaterial(Material material, int count){
             this.material = material;
