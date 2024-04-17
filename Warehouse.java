@@ -2,55 +2,53 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Warehouse {
-    private final int size;
-    private int currentSize;
-    private Map<Material, Integer> elements = new HashMap<>();
-    public Warehouse(int size){
-        this.size = size;
+    private final int capacity;
+    private int loadingSize;
+    private Map<String, WarehouseMaterial> elements = new HashMap<>();
+    public Warehouse(int capacity){
+        this.capacity = capacity;
     }
-    public void addMaterial(Material material, int count) throws SpecifiedQuantityExeption, FullWarehouseExeption {
-        WarehouseMaterial wm = new WarehouseMaterial(material, count);
-        wm.addMaterial(count);
-        if(currentSize > size){
-            throw new FullWarehouseExeption();
-        }
-        if(currentSize + count > size){
-            elements.put(material, size - currentSize);
-            throw new FullWarehouseExeption();
-        }else{
-            elements.put(material, count);
-        }
+    public void addMaterial(String material, int count) {
+
+
     }
-    public void removeMaterial(Material material, int count) throws EmptyWarehouseExeption, NotExistExeption {
-        WarehouseMaterial wm = new WarehouseMaterial(material, count);
-        wm.removeMaterial(count);
-        if(currentSize == 0){
-            throw new EmptyWarehouseExeption();
-        }
-        if(currentSize - count <= 0){
-            elements.remove(material, currentSize);
-            throw new EmptyWarehouseExeption();
-        }else{
-            elements.remove(material, count);
-        }
+    public void removeMaterial(String material, int count) {
+        
     }
     public void moveMaterial(){
 
     }
-    private class WarehouseMaterial{
-        int count;
-        Material material;
-        void addMaterial(int count) throws SpecifiedQuantityExeption {
-            if(count > material.getMaxCapacity()){
-                throw new SpecifiedQuantityExeption();
+    private class WarehouseMaterial{   
+        private int count;
+        private int maxCount = 10;
+        private Material material;
+        int addMaterial(int c) throws SpecifiedQuantityExeption {
+            int materialSize = 0;
+            try{
+                if(c + count <= maxCount){
+                    materialSize =  (c + count) * material.getSize();
+                    if ( c + count == maxCount) throw new SpecifiedQuantityExeption();
+                } else{
+                    materialSize = (maxCount) * material.getSize();
+                }
+            }catch (SpecifiedQuantityExeption e){
+                //
             }
-            this.count += count;
+            return materialSize;
         }
-        void removeMaterial(int count) throws NotExistExeption {
-            if(this.count == 0){
-                throw new NotExistExeption();
+        int removeMaterial(int c) {
+            int materialSize = 0;
+            try{
+                if( count - c >= 0 ){
+                    materialSize = (count - c) * material.getSize();
+                    if(count == 0) throw new NotExistExeption();
+                }else{
+                    materialSize = count * material.getSize();
+                }
+            }catch (NotExistExeption e){
+                //
             }
-            this.count -= count;
+            return materialSize;
         }
         WarehouseMaterial(Material material, int count){
             this.material = material;
